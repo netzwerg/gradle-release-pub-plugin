@@ -1,0 +1,51 @@
+apply plugin: 'groovy'
+apply plugin: ReleaseGitHubPlugin
+
+group = 'ch.netzwerg'
+
+repositories {
+    jcenter()
+}
+
+release {
+    github {
+        tagName = "test-release"
+    }
+}
+
+class ReleaseGitHubPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project project) {
+        project.extensions.create('release', ReleaseGitHubExtension.class)
+        project.tasks.create('releaseOnGitHub', ReleaseGitHubTask)
+    }
+
+}
+
+class ReleaseGitHubExtension {
+
+    String tagName
+
+    def github(Closure closure) {
+        closure.delegate = this
+        closure()
+    }
+
+}
+
+class ReleaseGitHubTask extends DefaultTask {
+
+    @TaskAction
+    def release() {
+        ReleaseGitHubExtension releaseExtension = project.getExtensions().getByType(ReleaseGitHubExtension.class)
+        project.exec {
+            executable 'curl'
+            args '-X', 'POST',
+                 '-u', 'user:password',
+                 '-d', "{\"tag_name\":\"$releaseExtension.tagName\"}",
+                 'https://api.github.com/repos/netzwerg/git-playground/releases'
+        }
+    }
+
+}
