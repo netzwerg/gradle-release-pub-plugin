@@ -11,7 +11,10 @@ repositories {
 
 release {
     github {
-        tagName = "test-release"
+        repo = 'git-playground'
+        user = 'netzwerg'
+        password = "$GITHUB_PASSWORD"
+        tokens = [tagName: project.version]
     }
 }
 
@@ -27,7 +30,10 @@ class ReleaseGitHubPlugin implements Plugin<Project> {
 
 class ReleaseGitHubExtension {
 
-    String tagName
+    String repo
+    String user
+    String password
+    Map<String, String> tokens
 
     def github(Closure closure) {
         closure.delegate = this
@@ -38,20 +44,22 @@ class ReleaseGitHubExtension {
 
 class ReleaseGitHubTask extends DefaultTask {
 
+    private static final String JSON_FILE_NAME = 'release-github.json'
+
     @TaskAction
     def release() {
         ReleaseGitHubExtension releaseExtension = project.getExtensions().getByType(ReleaseGitHubExtension.class)
         project.copy {
-            from 'release-github.json'
+            from JSON_FILE_NAME
             into getTemporaryDir()
-            filter(ReplaceTokens, tokens: [tagName: releaseExtension.tagName])
+            filter(ReplaceTokens, tokens: releaseExtension.tokens)
         }
         project.exec {
             executable 'curl'
             args '-X', 'POST',
-                 '-u', 'user:password',
-                 '--data-binary', '@' + getTemporaryDir() + File.separator + 'release-github.json',
-                 'https://api.github.com/repos/netzwerg/git-playground/releases'
+                 '-u', "$releaseExtension.user:$releaseExtension.password",
+                 '--data-binary', '@' + getTemporaryDir() + File.separator + JSON_FILE_NAME,
+                 "https://api.github.com/repos/$releaseExtension.user/$releaseExtension.repo/releases"
         }
     }
 
