@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'groovy'
 apply plugin: ReleaseGitHubPlugin
 
@@ -39,11 +41,16 @@ class ReleaseGitHubTask extends DefaultTask {
     @TaskAction
     def release() {
         ReleaseGitHubExtension releaseExtension = project.getExtensions().getByType(ReleaseGitHubExtension.class)
+        project.copy {
+            from 'release-github.json'
+            into getTemporaryDir()
+            filter(ReplaceTokens, tokens: [tagName: releaseExtension.tagName])
+        }
         project.exec {
             executable 'curl'
             args '-X', 'POST',
                  '-u', 'user:password',
-                 '-d', "{\"tag_name\":\"$releaseExtension.tagName\"}",
+                 '--data-binary', '@' + getTemporaryDir() + File.separator + 'release-github.json',
                  'https://api.github.com/repos/netzwerg/git-playground/releases'
         }
     }
