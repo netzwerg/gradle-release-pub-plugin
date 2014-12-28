@@ -1,7 +1,14 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+buildscript {
+    dependencies {
+        classpath fileTree('lib')
+    }
+}
+plugins {
+    id 'nu.studer.plugindev' version '1.0.3'
+}
 
 apply plugin: 'groovy'
-apply plugin: ReleaseGitHubPlugin
+apply plugin: 'ch.netzwerg.release.github'
 
 group = 'ch.netzwerg'
 
@@ -9,58 +16,31 @@ repositories {
     jcenter()
 }
 
+plugindev {
+    pluginName 'gradle-release-github-plugin'
+    pluginDescription 'Extension of gradle-release-plugin providing GitHub release publishing'
+    pluginImplementationClass 'ch.netzwerg.release.gradle.github.ReleaseGitHubPlugin'
+    pluginLicenses 'Apache-2.0'
+    pluginTags 'gradle', 'release', 'github'
+    authorId 'netzwerg'
+    authorName 'Rahel Lüthy'
+    authorEmail 'rahel.luethy@gmail.com'
+    projectUrl 'https://github.com/netzwerg/gradle-release-github-plugin'
+    projectInceptionYear '2014'
+    done()
+}
+
+dependencies {
+    compile files('lib/gradle-release-plugin-0.2.1-SNAPSHOT.jar')
+}
+
 release {
-    github {
-        repo = 'git-playground'
-        user = 'netzwerg'
-        password = "$GITHUB_PASSWORD"
-        tokens = [tagName: project.version]
-    }
-}
-
-class ReleaseGitHubPlugin implements Plugin<Project> {
-
-    @Override
-    void apply(Project project) {
-        project.extensions.create('release', ReleaseGitHubExtension.class)
-        project.tasks.create('releaseOnGitHub', ReleaseGitHubTask)
-    }
-
-}
-
-class ReleaseGitHubExtension {
-
-    String repo
-    String user
-    String password
-    Map<String, String> tokens
-
-    def github(Closure closure) {
-        closure.delegate = this
-        closure()
-    }
-
-}
-
-class ReleaseGitHubTask extends DefaultTask {
-
-    private static final String JSON_FILE_NAME = 'release-github.json'
-
-    @TaskAction
-    def release() {
-        ReleaseGitHubExtension releaseExtension = project.getExtensions().getByType(ReleaseGitHubExtension.class)
-        project.copy {
-            from JSON_FILE_NAME
-            into getTemporaryDir()
-            filter(ReplaceTokens, tokens: releaseExtension.tokens)
-        }
-        project.exec {
-            executable 'curl'
-            args '-X', 'POST',
-                 '-u', "$releaseExtension.user:$releaseExtension.password",
-                 '--data-binary', '@' + getTemporaryDir() + File.separator + JSON_FILE_NAME,
-                 "https://api.github.com/repos/$releaseExtension.user/$releaseExtension.repo/releases"
+    publications {
+        github {
+            repo = 'gradle-release-github-plugin'
+            user = 'netzwerg'
+            password = "$GITHUB_PASSWORD"
+            tokens = [tagName: project.version]
         }
     }
-
 }
