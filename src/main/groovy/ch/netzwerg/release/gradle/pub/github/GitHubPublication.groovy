@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.netzwerg.release.gradle.github
+package ch.netzwerg.release.gradle.pub.github
 
-import ch.netzwerg.gradle.release.ReleaseExtension
-import ch.netzwerg.gradle.release.ReleasePlugin
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import ch.netzwerg.gradle.release.Publication
 
-class ReleaseGitHubPlugin implements Plugin<Project> {
+class GitHubPublication extends Publication {
 
-    @Override
-    void apply(Project project) {
-        project.plugins.apply ReleasePlugin
-        ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        releaseExtension.factory.delegate = new GitHubPublicationFactory()
-        project.tasks.create('releasePublishToGitHub', ReleaseGitHubTask)
+    String repo
+    String user
+    String password
+    Map<String, String> tokens
+
+    GitHubPublication(String name) {
+        super(name)
+    }
+
+    def github(Closure closure) {
+        closure.delegate = this
+        closure()
     }
 
 }

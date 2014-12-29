@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.netzwerg.release.gradle.github
+package ch.netzwerg.release.gradle.pub.github
 
 import ch.netzwerg.gradle.release.Publication
+import ch.netzwerg.gradle.release.PublicationFactory
 
-class GitHubPublication extends Publication {
+class GitHubPublicationFactory extends PublicationFactory {
 
-    String repo
-    String user
-    String password
-    Map<String, String> tokens
-
-    GitHubPublication(String name) {
-        super(name)
-    }
-
-    def github(Closure closure) {
-        closure.delegate = this
-        closure()
+    @Override
+    Publication create(String name) {
+        return new GitHubPublication(name);
     }
 
 }

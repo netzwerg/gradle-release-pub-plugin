@@ -8,7 +8,7 @@ plugins {
 }
 
 apply plugin: 'groovy'
-apply plugin: 'ch.netzwerg.release.github'
+apply plugin: 'ch.netzwerg.release.pub'
 
 group = 'ch.netzwerg'
 
@@ -17,15 +17,15 @@ repositories {
 }
 
 plugindev {
-    pluginName 'gradle-release-github-plugin'
-    pluginDescription 'Extension of gradle-release-plugin providing GitHub release publishing'
-    pluginImplementationClass 'ch.netzwerg.release.gradle.github.ReleaseGitHubPlugin'
+    pluginName 'gradle-release-pub-plugin'
+    pluginDescription 'Trigger release publications, e.g. on GitHub (extension of ch.netzwerg.release plugin)'
+    pluginImplementationClass 'ch.netzwerg.release.gradle.pub.ReleasePublicationPlugin'
     pluginLicenses 'Apache-2.0'
     pluginTags 'gradle', 'release', 'github'
     authorId 'netzwerg'
     authorName 'Rahel Lüthy'
     authorEmail 'rahel.luethy@gmail.com'
-    projectUrl 'https://github.com/netzwerg/gradle-release-github-plugin'
+    projectUrl 'https://github.com/netzwerg/gradle-release-pub-plugin'
     projectInceptionYear '2014'
     done()
 }
@@ -37,7 +37,7 @@ dependencies {
 release {
     publications {
         github {
-            repo = 'gradle-release-github-plugin'
+            repo = 'gradle-release-pub-plugin'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
             tokens = [tagName: project.version]
