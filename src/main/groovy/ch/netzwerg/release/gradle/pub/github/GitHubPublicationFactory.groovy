@@ -15,13 +15,12 @@
  */
 package ch.netzwerg.release.gradle.pub.github
 
-import ch.netzwerg.gradle.release.Publication
-import ch.netzwerg.gradle.release.PublicationFactory
+import org.gradle.api.NamedDomainObjectFactory
 
-class GitHubPublicationFactory extends PublicationFactory {
+class GitHubPublicationFactory implements NamedDomainObjectFactory<GitHubPublication> {
 
     @Override
-    Publication create(String name) {
+    GitHubPublication create(String name) {
         return new GitHubPublication(name);
     }
 

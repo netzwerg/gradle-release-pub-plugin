@@ -36,11 +36,17 @@ dependencies {
 
 release {
     publications {
-        github {
-            repo = 'gradle-release-pub-plugin'
+        githubOne {
+            repo = 'git-playground'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
-            tokens = [tagName: project.version]
+            tokens = [tagName: 'one']
+        }
+        githubTwo {
+            repo = 'git-playground'
+            user = 'netzwerg'
+            password = "$GITHUB_PASSWORD"
+            tokens = [tagName: 'two']
         }
     }
 }

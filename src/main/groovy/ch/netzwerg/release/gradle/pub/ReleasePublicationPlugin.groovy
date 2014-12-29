@@ -17,6 +17,7 @@ package ch.netzwerg.release.gradle.pub
 
 import ch.netzwerg.gradle.release.ReleaseExtension
 import ch.netzwerg.gradle.release.ReleasePlugin
+import ch.netzwerg.release.gradle.pub.github.GitHubPublication
 import ch.netzwerg.release.gradle.pub.github.GitHubPublicationFactory
 import ch.netzwerg.release.gradle.pub.github.ReleaseGitHubTask
 import org.gradle.api.Plugin
@@ -24,12 +25,14 @@ import org.gradle.api.Project
 
 class ReleasePublicationPlugin implements Plugin<Project> {
 
+    private static final String RELEASE_GIT_HUB_TASK_NAME = 'releasePubGitHub'
+
     @Override
     void apply(Project project) {
         project.plugins.apply ReleasePlugin
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        releaseExtension.factory.delegate = new GitHubPublicationFactory()
-        project.tasks.create('releasePublishToGitHub', ReleaseGitHubTask)
+        releaseExtension.getPublicationFactory().registerDelegateFactory(GitHubPublication.PREFIX, new GitHubPublicationFactory())
+        project.tasks.create(RELEASE_GIT_HUB_TASK_NAME, ReleaseGitHubTask)
     }
 
 }

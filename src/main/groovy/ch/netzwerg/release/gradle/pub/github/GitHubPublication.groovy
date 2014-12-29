@@ -15,9 +15,11 @@
  */
 package ch.netzwerg.release.gradle.pub.github
 
-import ch.netzwerg.gradle.release.Publication
+import ch.netzwerg.gradle.release.pub.Publication
 
 class GitHubPublication extends Publication {
+
+    public static final String PREFIX = "github"
 
     String repo
     String user

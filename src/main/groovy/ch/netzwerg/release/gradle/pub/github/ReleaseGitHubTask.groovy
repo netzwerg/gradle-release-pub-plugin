@@ -19,16 +19,27 @@ import ch.netzwerg.gradle.release.ReleaseExtension
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.slf4j.LoggerFactory
 
 class ReleaseGitHubTask extends DefaultTask {
 
+    private static final LOGGER = LoggerFactory.getLogger(ReleaseGitHubTask.class)
     private static final String JSON_FILE_NAME = 'release-github.json'
+    private static final String RELEASE_GIT_HUB_TASK_DESC = 'Publishes release(s) via GitHub REST API.'
+
+    ReleaseGitHubTask() {
+        description = RELEASE_GIT_HUB_TASK_DESC
+    }
 
     @TaskAction
     def release() {
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        def publication = releaseExtension.getPublicationByName('github') as GitHubPublication
+        Collection<GitHubPublication> publications = releaseExtension.getPublicationsByNamePrefix(GitHubPublication.PREFIX) as Collection<GitHubPublication>
+        LOGGER.debug("Number of resolved GitHubPublications: " + publications.size())
+        publications.each { publishToGitHub(it) }
+    }
 
+    def publishToGitHub(GitHubPublication publication) {
         project.copy {
             from JSON_FILE_NAME
             into getTemporaryDir()
@@ -42,7 +53,6 @@ class ReleaseGitHubTask extends DefaultTask {
                     '--data-binary', '@' + getTemporaryDir() + File.separator + JSON_FILE_NAME,
                     "https://api.github.com/repos/$publication.user/$publication.repo/releases"
         }
-
     }
 
 }
