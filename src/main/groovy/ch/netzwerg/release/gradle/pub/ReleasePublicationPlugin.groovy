@@ -32,7 +32,9 @@ class ReleasePublicationPlugin implements Plugin<Project> {
         project.plugins.apply ReleasePlugin
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
         releaseExtension.getPublicationFactory().registerDelegateFactory(GitHubPublication.PREFIX, new GitHubPublicationFactory())
-        project.tasks.create(RELEASE_GIT_HUB_TASK_NAME, ReleaseGitHubTask)
+        def releasePubGitHubTask = project.tasks.create(RELEASE_GIT_HUB_TASK_NAME, ReleaseGitHubTask)
+        def releaseTask = project.tasks.findByPath(ReleasePlugin.RELEASE_TASK_NAME)
+        releaseTask.finalizedBy(releasePubGitHubTask)
     }
 
 }
