@@ -40,7 +40,7 @@ release {
             repo = 'git-playground'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
-            tokens = [tagName: 'one']
+            tokens = [tagName: release.tagName]
         }
         githubTwo {
             repo = 'git-playground'
