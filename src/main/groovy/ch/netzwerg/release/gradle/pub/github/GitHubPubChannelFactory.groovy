@@ -15,24 +15,13 @@
  */
 package ch.netzwerg.release.gradle.pub.github
 
-import ch.netzwerg.gradle.release.pub.Publication
+import org.gradle.api.NamedDomainObjectFactory
 
-class GitHubPublication extends Publication {
+class GitHubPubChannelFactory implements NamedDomainObjectFactory<GitHubPubChannel> {
 
-    public static final String PREFIX = "github"
-
-    String repo
-    String user
-    String password
-    Map<String, String> tokens
-
-    GitHubPublication(String name) {
-        super(name)
-    }
-
-    def github(Closure closure) {
-        closure.delegate = this
-        closure()
+    @Override
+    GitHubPubChannel create(String name) {
+        return new GitHubPubChannel(name);
     }
 
 }

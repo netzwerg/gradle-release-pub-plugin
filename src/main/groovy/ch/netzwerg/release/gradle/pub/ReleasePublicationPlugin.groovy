@@ -17,8 +17,8 @@ package ch.netzwerg.release.gradle.pub
 
 import ch.netzwerg.gradle.release.ReleaseExtension
 import ch.netzwerg.gradle.release.ReleasePlugin
-import ch.netzwerg.release.gradle.pub.github.GitHubPublication
-import ch.netzwerg.release.gradle.pub.github.GitHubPublicationFactory
+import ch.netzwerg.release.gradle.pub.github.GitHubPubChannel
+import ch.netzwerg.release.gradle.pub.github.GitHubPubChannelFactory
 import ch.netzwerg.release.gradle.pub.github.ReleaseGitHubTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -31,7 +31,7 @@ class ReleasePublicationPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.plugins.apply ReleasePlugin
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        releaseExtension.getPublicationFactory().registerDelegateFactory(GitHubPublication.PREFIX, new GitHubPublicationFactory())
+        releaseExtension.getPubChannelFactory().registerDelegateFactory(GitHubPubChannel.PREFIX, new GitHubPubChannelFactory())
         def releasePubGitHubTask = project.tasks.create(RELEASE_GIT_HUB_TASK_NAME, ReleaseGitHubTask)
         def releaseTask = project.tasks.findByPath(ReleasePlugin.RELEASE_TASK_NAME)
         releaseTask.finalizedBy(releasePubGitHubTask)

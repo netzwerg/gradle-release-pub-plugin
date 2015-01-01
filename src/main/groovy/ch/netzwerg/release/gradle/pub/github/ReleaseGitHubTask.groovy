@@ -34,24 +34,24 @@ class ReleaseGitHubTask extends DefaultTask {
     @TaskAction
     def release() {
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        Collection<GitHubPublication> publications = releaseExtension.getPublicationsByNamePrefix(GitHubPublication.PREFIX) as Collection<GitHubPublication>
-        LOGGER.debug("Number of resolved GitHubPublications: " + publications.size())
-        publications.each { publishToGitHub(it) }
+        Collection<GitHubPubChannel> pubChannels = releaseExtension.getPubChannelsByNamePrefix(GitHubPubChannel.PREFIX) as Collection<GitHubPubChannel>
+        LOGGER.debug("Number of resolved GitHub channels: " + pubChannels.size())
+        pubChannels.each { publishToGitHub(it) }
     }
 
-    def publishToGitHub(GitHubPublication publication) {
+    def publishToGitHub(GitHubPubChannel pubChannel) {
         project.copy {
             from JSON_FILE_NAME
             into getTemporaryDir()
-            filter(ReplaceTokens, tokens: publication.tokens)
+            filter(ReplaceTokens, tokens: pubChannel.tokens)
         }
 
         project.exec {
             executable 'curl'
             args '-X', 'POST',
-                    '-u', "$publication.user:$publication.password",
+                    '-u', "$pubChannel.user:$pubChannel.password",
                     '--data-binary', '@' + getTemporaryDir() + File.separator + JSON_FILE_NAME,
-                    "https://api.github.com/repos/$publication.user/$publication.repo/releases"
+                    "https://api.github.com/repos/$pubChannel.user/$pubChannel.repo/releases"
         }
     }
 
