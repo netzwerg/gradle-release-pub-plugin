@@ -44,7 +44,7 @@ release {
     push = true // otherwise the tag will not be present when publishing the GitHub release
     publish {
         github {
-            repo = 'git-release-pub-plugin'
+            repo = 'gradle-release-pub-plugin'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
             tokens = [tagName: release.tagName]
