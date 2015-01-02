@@ -48,7 +48,7 @@ _Coming soon_
 # Applying the plugin
 
 The plugin is hosted on [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-pub-plugin). It requires
-the [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-plugin) as its base:
+the ['ch.netzwerg.release' plugin](https://bintray.com/netzwerg/gradle-plugins/gradle-release-plugin) as its base:
 
 ## New plugin mechanism (as of Gradle 2.1):
 
