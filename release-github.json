@@ -1,5 +1,5 @@
 {
  "tag_name" : "@tagName@",
- "name" : "Testing gradle-release-github-plugin",
- "body" : "An example release body"
+ "name" : "Testing at @timeStamp@",
+ "body" : "Test release by gradle-release-pub-plugin"
 }

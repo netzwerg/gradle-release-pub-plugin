@@ -34,7 +34,7 @@ class ReleaseGitHubTask extends DefaultTask {
     @TaskAction
     def release() {
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
-        Collection<GitHubPubChannel> pubChannels = releaseExtension.getPubChannelsByNamePrefix(GitHubPubChannel.PREFIX) as Collection<GitHubPubChannel>
+        Collection<GitHubPubChannel> pubChannels = releaseExtension.pubChannels.byChannelType(GitHubPubChannel.PREFIX) as Collection<GitHubPubChannel>
         LOGGER.debug("Number of resolved GitHub channels: " + pubChannels.size())
         pubChannels.each { publishToGitHub(it) }
     }

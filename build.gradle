@@ -12,13 +12,18 @@ apply plugin: 'ch.netzwerg.release.pub'
 
 group = 'ch.netzwerg'
 
+allprojects {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
 repositories {
     jcenter()
 }
 
 plugindev {
     pluginName 'gradle-release-pub-plugin'
-    pluginDescription 'Trigger release publications, e.g. on GitHub (extension of ch.netzwerg.release plugin)'
+    pluginDescription "Complements 'ch.netzwerg.release' plugin with publication channels"
     pluginImplementationClass 'ch.netzwerg.release.gradle.pub.ReleasePublicationPlugin'
     pluginLicenses 'Apache-2.0'
     pluginTags 'gradle', 'release', 'github'
@@ -36,17 +41,11 @@ dependencies {
 
 release {
     publish {
-        githubOne {
+        github {
             repo = 'git-playground'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
-            tokens = [tagName: release.tagName]
-        }
-        githubTwo {
-            repo = 'git-playground'
-            user = 'netzwerg'
-            password = "$GITHUB_PASSWORD"
-            tokens = [tagName: 'two']
+            tokens = [tagName: release.tagName, timeStamp: new Date()]
         }
     }
 }
