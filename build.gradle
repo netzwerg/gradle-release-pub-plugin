@@ -5,6 +5,7 @@ buildscript {
 }
 plugins {
     id 'nu.studer.plugindev' version '1.0.3'
+    id 'ch.netzwerg.release' version '0.3.0'
 }
 
 apply plugin: 'groovy'
@@ -36,7 +37,7 @@ plugindev {
 }
 
 dependencies {
-    compile files('lib/gradle-release-plugin-0.2.1-SNAPSHOT.jar')
+    compile 'ch.netzwerg:gradle-release-plugin:0.3.0'
 }
 
 release {
