@@ -7,7 +7,7 @@ Supports publication of releases through configurable channels.
 # Channel Type 'github'
 
 Creates a GitHub release via [official REST API](https://developer.github.com/v3/repos/releases/#create-a-release).
-Requires [curl](http://curl.haxx.se).
+Requires the [curl](http://curl.haxx.se) executable.
 
 ## Configuration
 ### JSON File
@@ -29,6 +29,7 @@ Example:
 
 ```groovy
 release {
+    push = true // otherwise GitHub won't be able to link the release to its tag
     publish {
         github {
             repo = 'git-playground'
@@ -43,6 +44,36 @@ release {
 # Channel Type 'mail'
 
 _Coming soon_
+
+# Applying the plugin
+
+The plugin is hosted on [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-pub-plugin). It requires
+the [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-plugin) as its base:
+
+## New plugin mechanism (as of Gradle 2.1):
+
+```groovy
+plugins {
+  id 'ch.netzwerg.release' version 'x.y.z' // required base plugin
+  id 'ch.netzwerg.release.pub' version 'x.y.z'
+}
+```
+
+## Older Gradle versions:
+
+```groovy
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'ch.netzwerg:gradle-release-plugin:x.y.z' // required base plugin
+        classpath 'ch.netzwerg:gradle-release-pub-plugin:x.y.z'
+    }
+}
+apply plugin: 'ch.netzwerg.release' // required base plugin
+apply plugin: 'ch.netzwerg.release.pub'
+```
 
 # Acknowledgements
 
