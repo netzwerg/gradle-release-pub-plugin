@@ -41,12 +41,19 @@ dependencies {
 }
 
 release {
+    push = true // otherwise the tag will not be present when publishing the GitHub release
     publish {
         github {
-            repo = 'git-playground'
+            repo = 'git-release-pub-plugin'
             user = 'netzwerg'
             password = "$GITHUB_PASSWORD"
-            tokens = [tagName: release.tagName, timeStamp: new Date()]
+            tokens = [tagName: release.tagName]
         }
     }
+}
+
+bintray {
+    user = "$BINTRAY_USER"
+    key = "$BINTRAY_API_KEY"
+    pkg.repo = 'gradle-plugins'
 }
