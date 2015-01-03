@@ -1,15 +1,9 @@
-buildscript {
-    dependencies {
-        classpath fileTree('lib')
-    }
-}
 plugins {
     id 'nu.studer.plugindev' version '1.0.3'
-    id 'ch.netzwerg.release' version '0.3.1'
+    id 'ch.netzwerg.release.pub' version '0.1.1'
 }
 
 apply plugin: 'groovy'
-apply plugin: 'ch.netzwerg.release.pub'
 
 group = 'ch.netzwerg'
 
