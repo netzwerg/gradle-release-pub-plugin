@@ -1,4 +1,4 @@
-gradle-release-pub-plugin
+gradle-release-pub-plugin [![Build Status](https://travis-ci.org/netzwerg/gradle-release-pub-plugin.svg?branch=master)](https://travis-ci.org/netzwerg/gradle-release-pub-plugin)
 =========================
 
 Gradle plugin complementing the ['ch.netzwerg.release' plugin](https://github.com/netzwerg/gradle-release-plugin):
