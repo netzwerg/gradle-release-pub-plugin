@@ -1,4 +1,5 @@
 {
  "tag_name" : "@tagName@",
- "name" : "Initial public release"
+ "name" : "Bugfix Release: Include dependency on 'ch.netzwerg.release' plugin in POM",
+ "body" : "Fixes #1"
 }

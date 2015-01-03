@@ -47,14 +47,13 @@ _Coming soon_
 
 # Applying the plugin
 
-The plugin is hosted on [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-pub-plugin). It requires
-the ['ch.netzwerg.release' plugin](https://bintray.com/netzwerg/gradle-plugins/gradle-release-plugin) as its base:
+The plugin is hosted on [Bintray](https://bintray.com/netzwerg/gradle-plugins/gradle-release-pub-plugin) and can be
+applied as follows:
 
 ## New plugin mechanism (as of Gradle 2.1):
 
 ```groovy
 plugins {
-  id 'ch.netzwerg.release' version 'x.y.z' // required base plugin
   id 'ch.netzwerg.release.pub' version 'x.y.z'
 }
 ```
@@ -67,11 +66,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'ch.netzwerg:gradle-release-plugin:x.y.z' // required base plugin
         classpath 'ch.netzwerg:gradle-release-pub-plugin:x.y.z'
     }
 }
-apply plugin: 'ch.netzwerg.release' // required base plugin
 apply plugin: 'ch.netzwerg.release.pub'
 ```
 

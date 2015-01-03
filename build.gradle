@@ -22,6 +22,10 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    compile 'ch.netzwerg:gradle-release-plugin:0.3.1'
+}
+
 plugindev {
     pluginName 'gradle-release-pub-plugin'
     pluginDescription "Complements 'ch.netzwerg.release' plugin with publication channels"
@@ -36,12 +40,8 @@ plugindev {
     done()
 }
 
-dependencies {
-    compile 'ch.netzwerg:gradle-release-plugin:0.3.0'
-}
-
 release {
-    push = true // otherwise the tag will not be present when publishing the GitHub release
+    push = true // otherwise GitHub won't be able to link the release to its tag
     publish {
         github {
             repo = 'gradle-release-pub-plugin'
