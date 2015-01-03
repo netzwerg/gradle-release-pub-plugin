@@ -1,0 +1,10 @@
+sudo: false
+language: groovy
+jdk:
+  - openjdk6
+env:
+  - TERM=dumb
+install:
+  - /bin/true
+script:
+  - ./gradlew -PGITHUB_PASSWORD= -PBINTRAY_USER -PBINTRAY_API_KEY build
