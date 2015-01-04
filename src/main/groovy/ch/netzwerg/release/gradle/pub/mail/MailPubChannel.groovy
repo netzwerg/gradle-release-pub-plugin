@@ -25,9 +25,12 @@ class MailPubChannel extends PubChannel {
     String toAddress
     String subject
     String messageFileName
-    String host
-    String user
-    String password
+    String smtpUrl
+    String smtpPort
+    String smtpUser
+    String smtpPassword
+
+    // TODO: Add tokens to parametrize subject & message
 
     MailPubChannel(String name) {
         super(name)

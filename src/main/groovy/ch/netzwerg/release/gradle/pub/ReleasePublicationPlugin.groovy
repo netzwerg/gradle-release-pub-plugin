@@ -32,28 +32,64 @@ class ReleasePublicationPlugin implements Plugin<Project> {
 
     private static final LOGGER = LoggerFactory.getLogger(ReleasePublicationPlugin.class)
     private static final String RELEASE_GIT_HUB_TASK_NAME = 'releasePubGitHub'
+    private static final String PROJECT_CONFIG_NAME = 'releasePubPluginMailTask'
+    private static final List<String> ANT_RUNTIME_DEPENDENCIES = Arrays.asList(
+            'org.apache.ant:ant-javamail:1.9.4',
+            'javax.activation:activation:1.1.1',
+            'javax.mail:mail:1.4.7');
+
 
     @Override
     void apply(Project project) {
+        // Enforce presence of base plugin
         project.plugins.apply ReleasePlugin
         ReleaseExtension releaseExtension = project.getExtensions().findByType(ReleaseExtension)
 
+        // Support GitHubPubChannels
         releaseExtension.pubChannels.registerPubChannelFactory(GitHubPubChannel.PREFIX, new GitHubPubChannelFactory())
 
         def releasePubGitHubTask = project.tasks.create(RELEASE_GIT_HUB_TASK_NAME, ReleaseGitHubTask)
         def releaseTask = project.tasks.findByPath(ReleasePlugin.RELEASE_TASK_NAME)
         releaseTask.finalizedBy(releasePubGitHubTask)
 
+        // Support MailPubChannels
         Closure<Task> mailChannelHandler = { MailPubChannel mailPubChannel ->
-            LOGGER.debug("Handling channel config (type: '$MailPubChannel.PREFIX', name: '$mailPubChannel.name')")
-
+            LOGGER.debug("Creating MailTask for configured channel (type: '$MailPubChannel.PREFIX', name: '$mailPubChannel.name')")
             String capitalizedName = mailPubChannel.name.capitalize()
             String mailTaskName = "releasePubMail$capitalizedName"
             MailTask mailTask = project.tasks.create(mailTaskName, MailTask.class)
+            mailTask.description = "Sends release announcement mail for config '$mailPubChannel.name'"
             mailTask.config = mailPubChannel
             releaseTask.finalizedBy(mailTask)
         }
+
         releaseExtension.pubChannels.registerPubChannelFactory(MailPubChannel.PREFIX, new MailPubChannelFactory(mailChannelHandler))
+
+        project.afterEvaluate {
+            if (isMailChannelConfigsPresent(releaseExtension)) {
+                registerMailTaskRuntimeDependencies(project)
+                configureAntClassLoader(project)
+            }
+        }
+
+    }
+
+    private static boolean isMailChannelConfigsPresent(ReleaseExtension extension) {
+        !extension.pubChannels.byChannelType(MailPubChannel.PREFIX).isEmpty()
+    }
+
+    private static void registerMailTaskRuntimeDependencies(Project project) {
+        project.configurations.create(PROJECT_CONFIG_NAME)
+        ANT_RUNTIME_DEPENDENCIES.each {
+            project.dependencies.add(PROJECT_CONFIG_NAME, it)
+        }
+    }
+
+    private static void configureAntClassLoader(Project project) {
+        ClassLoader antClassLoader = org.apache.tools.ant.Project.class.classLoader
+        project.configurations.getByName(PROJECT_CONFIG_NAME).each { File f ->
+            antClassLoader.addURL(f.toURI().toURL())
+        }
     }
 
 }
