@@ -17,7 +17,8 @@ repositories {
 }
 
 dependencies {
-    compile 'ch.netzwerg:gradle-release-plugin:0.3.1'
+//    compile 'ch.netzwerg:gradle-release-plugin:0.3.1'
+    compile fileTree('lib')
 }
 
 plugindev {

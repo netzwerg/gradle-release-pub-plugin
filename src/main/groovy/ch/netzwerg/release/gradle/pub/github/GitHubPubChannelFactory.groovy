@@ -15,13 +15,17 @@
  */
 package ch.netzwerg.release.gradle.pub.github
 
-import org.gradle.api.NamedDomainObjectFactory
+import ch.netzwerg.gradle.release.pub.PubChannelFactory
 
-class GitHubPubChannelFactory implements NamedDomainObjectFactory<GitHubPubChannel> {
+class GitHubPubChannelFactory implements PubChannelFactory<GitHubPubChannel> {
 
     @Override
     GitHubPubChannel create(String name) {
         return new GitHubPubChannel(name);
     }
 
+    @Override
+    void onConfigurationComplete(GitHubPubChannel gitHubPubChannel) {
+
+    }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Rahel Lüthy
+ * Copyright 2015 Rahel Lüthy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.netzwerg.release.gradle.pub.github
+package ch.netzwerg.release.gradle.pub.mail
 
 import ch.netzwerg.gradle.release.pub.PubChannel
 
-class GitHubPubChannel extends PubChannel {
+class MailPubChannel extends PubChannel {
 
-    public static final String PREFIX = "github"
+    public static final String PREFIX = "mail"
 
-    String repo
+    String fromAddress
+    String toAddress
+    String subject
+    String messageFileName
+    String host
     String user
     String password
-    Map<String, String> tokens
 
-    GitHubPubChannel(String name) {
+    MailPubChannel(String name) {
         super(name)
     }
 
